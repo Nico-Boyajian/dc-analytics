@@ -1,0 +1,21 @@
+body {
+  padding: 50;
+  margin: 50;
+}
+
+#map,
+body,
+html {
+  display: block;
+      position: relative;
+      margin: 0px auto;
+      width: 500px;
+      height: 500px;
+      padding: 10px;
+      border: none;
+      border-radius: 3px;
+      font-size: 12px;
+      text-align: center;
+      color: #fff;
+      background: #ee8a65;
+      }
