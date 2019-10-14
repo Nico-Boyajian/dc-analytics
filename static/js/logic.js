@@ -1,49 +1,45 @@
-// Creating map object
-var myMap = L.map("map", {
+var map = L.map("map", {
   center: [38.9, -77.03],
   zoom: 11
 });
 
-// Adding tile layer to the map
 L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
   attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
   maxZoom: 18,
   id: "mapbox.streets",
   accessToken: API_KEY
-}).addTo(myMap);
+}).addTo(map);
 
-// Store API query variables
-var baseURL = "https://data.cityofnewyork.us/resource/fhrw-4uyv.json?";
-var date = "$where=created_date between'2016-01-10T12:00:00' and '2017-01-01T14:00:00'";
-var complaint = "&complaint_type=Rodent";
-var limit = "&$limit=10000";
-
-// Assemble API query URL
-var url = baseURL + date + complaint + limit;
-
-// Grab the data with d3
-d3.json(url, function(response) {
-
-  // Create a new marker cluster group
-  var markers = L.markerClusterGroup();
-
-  // Loop through data
-  for (var i = 0; i < response.length; i++) {
-
-    // Set the data location property to a variable
-    var location = response[i].location;
-
-    // Check for location property
-    if (location) {
-
-      // Add a new marker to the cluster group and bind a pop-up
-      markers.addLayer(L.marker([location.coordinates[1], location.coordinates[0]])
-        .bindPopup(response[i].descriptor));
-    }
-
-  }
-
-  // Add our marker cluster layer to the map
-  myMap.addLayer(markers);
-
+var link = "static/data/Ward_from_2012.geojson";
+function chooseColor(NAME) {
+ switch (NAME) {
+ case "Ward 1":
+   return "yellow";
+ case "Ward 2":
+   return "red";
+ case "Ward 3":
+   return "orange";
+ case "Ward 4":
+   return "green";
+ case "Ward 5":
+   return "purple";
+ case "Ward 6":
+   return "blue";
+ case "Ward 7":
+   return "pink";
+ default:
+   return "black";
+ }
+}
+d3.json(link, function(data) {
+ L.geoJson(data, {
+   style: function(Feature) {
+     return {
+       color: "white",
+       fillColor: chooseColor(Feature.properties.NAME),
+       fillOpacity: 0.5,
+       weight: 1.5
+     };
+   }
+ }).addTo(map);
 });

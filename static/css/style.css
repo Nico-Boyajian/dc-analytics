@@ -7,15 +7,15 @@ body {
 body,
 html {
   display: block;
-      position: relative;
-      margin: 0px auto;
+      position: left;
+      margin: 0px left;
       width: 500px;
       height: 500px;
       padding: 10px;
       border: none;
       border-radius: 3px;
-      font-size: 12px;
+      font-size: 15px;
       text-align: center;
-      color: #fff;
-      background: #ee8a65;
+      color: rgb(17, 16, 16);
+      background: #bbb7b6;
       }
