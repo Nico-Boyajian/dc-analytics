@@ -2,11 +2,12 @@ body {
   padding: 50;
   margin: 50;
 }
-
 #map,
+#plot,
 body,
+#pie,
 html {
-  display: block;
+  display: inline-block;
       position: left;
       margin: 0px left;
       width: 500px;

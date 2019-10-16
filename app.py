@@ -8,7 +8,7 @@ from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
 
-from flask import Flask
+from flask import Flask, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -24,7 +24,6 @@ Base = automap_base()
 Base.prepare(db.engine, reflect=True)
 
 # Save reference to the table
-print(Base.classes.keys())
 service_code_2012 = Base.classes.calls_2012
 
 #################################################
@@ -32,17 +31,40 @@ service_code_2012 = Base.classes.calls_2012
 #################################################
 
 @app.route("/")
-def names():
-    """Return a random list of 10000 dictionaries."""
+def index():
+    """Return the homepage."""
+    return render_template("index.html")
+
+@app.route("/top_complaints/<year>")
+def complaints(year):
 
     # Use Pandas to perform the sql query
-    df = pd.read_sql_query("select * from calls_2012", db.session.bind)
-    random.seed(4)
-    sample = random.sample(df, 100)
+    df_complaints = pd.read_sql_query("select servicecodedescription, count(*) as calls from calls_"+ year + " group by servicecodedescription order by count(*) desc limit 10", db.session.bind)
+    return jsonify(list(df_complaints.iloc[:,0]), list(df_complaints.iloc[:,1]))
 
-    # Return a list of the column names (sample names)
-    return sample.to_json(orient='records')
+@app.route("/by_ward/<year>")
+def wards(year):
+    # Use Pandas to perform the sql query
+    df_wards = pd.read_sql_query("select ward, count(*) as calls from calls_"+ year + " where ward is not null group by ward", db.session.bind)
+    return jsonify(list(df_wards.iloc[:,0]), list(df_wards.iloc[:,1]))
+
+@app.route("/years")
+def years():
+    return jsonify(["2012", "2013", "2014", "2015", "2016", "2017"])
 
 
 if __name__ == "__main__":
     app.run()
+
+# def df_to_geojson(df, properties, lat='latitude', lon='longitude'):
+#     geojson = {'type':'FeatureCollection', 'features':[]}
+#     for _, row in df.iterrows():
+#         feature = {'type':'Feature',
+#                    'properties':{},
+#                    'geometry':{'type':'Point',
+#                                'coordinates':[]}}
+#         feature['geometry']['coordinates'] = [row[lon],row[lat]]
+#         for prop in properties:
+#             feature['properties'][prop] = row[prop]
+#         geojson['features'].append(feature)
+#     return geojson
