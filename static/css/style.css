@@ -1,22 +1,60 @@
-body {
-  padding: 50;
-  margin: 50;
+.navbar.navbar-dark{
+  margin-right: 0px;
+  background-color: rgb(216, 4, 4);
+  color: #ffffff;
 }
-#map,
-#plot,
-body,
-#pie,
-html {
+
+.navbar-brand {
+  color: #ffffff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.navbar-right {
+  margin-top: 2px;
+  margin-right: 5px;
+  margin-bottom: 2px;
+}
+
+.form-control {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background-image: url("https://wtop.com/wp-content/uploads/2016/09/AP_699279867624-1880x1234.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+}
+#map {
   display: inline-block;
-      position: left;
-      margin: 0px left;
-      width: 500px;
-      height: 500px;
-      padding: 10px;
-      border: none;
-      border-radius: 3px;
-      font-size: 15px;
-      text-align: center;
-      color: rgb(17, 16, 16);
-      background: #bbb7b6;
-      }
+  position: relative;
+  border-radius: 10px;
+  left: -360px;
+  margin-top: 10px;
+  width: 700px;
+  height: 800px;
+}
+#plot{
+  display: inline-block;
+  position: absolute;
+  border-radius: 10px;
+  left: -200px;
+  margin-top: 10px;
+  width: 1100px;
+  height: 600px;
+  background-color: #ebe8e8;
+}
+#pie{
+  display: inline-block;
+  position: absolute;
+  border-radius: 10px;
+  top: -200px;
+  right: -340px;
+  margin-top: 10px;
+  width: 1100px;
+  height: 600px;
+  background-color: #ebe8e8;
+}

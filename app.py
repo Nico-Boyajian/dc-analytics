@@ -3,6 +3,7 @@ import random
 
 import pandas as pd
 import numpy as np
+import json
 
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
@@ -22,9 +23,6 @@ db = SQLAlchemy(app)
 Base = automap_base()
 # reflect the tables
 Base.prepare(db.engine, reflect=True)
-
-# Save reference to the table
-service_code_2012 = Base.classes.calls_2012
 
 #################################################
 # Flask Routes
@@ -52,19 +50,19 @@ def wards(year):
 def years():
     return jsonify(["2012", "2013", "2014", "2015", "2016", "2017"])
 
+@app.route("/markers/<year>")
+def locations(year):
+
+    df_locations = pd.read_sql_query("select servicecodedescription, avg(latitude) as lat, avg(longitidue) as long from calls_"+ year + " group by servicecodedescription", db.session.bind)
+    df_update = df_locations.dropna(how='any',axis=0)
+    # df_update['combined'] = df_update[['lat', 'long']].values.tolist()
+    # df_update = df_update.drop(columns=['lat', 'long'])
+    data = df_update.to_dict('records')
+    return jsonify(data)
+
+def years():
+    return jsonify(["2012", "2013", "2014", "2015", "2016", "2017"])
+
 
 if __name__ == "__main__":
     app.run()
-
-# def df_to_geojson(df, properties, lat='latitude', lon='longitude'):
-#     geojson = {'type':'FeatureCollection', 'features':[]}
-#     for _, row in df.iterrows():
-#         feature = {'type':'Feature',
-#                    'properties':{},
-#                    'geometry':{'type':'Point',
-#                                'coordinates':[]}}
-#         feature['geometry']['coordinates'] = [row[lon],row[lat]]
-#         for prop in properties:
-#             feature['properties'][prop] = row[prop]
-#         geojson['features'].append(feature)
-#     return geojson
